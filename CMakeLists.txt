@@ -46,6 +46,8 @@ option ( LUA_USE_ASSERT "Turn on assertions for the whole LuaJIT VM. This signif
 option ( LUAJIT_CPU_SSE2 "Disable SSE2." OFF )
 option ( LUAJIT_CPU_NOCMOV "Disable NOCMOV." OFF )
 
+option ( LUAJIT_SHARED "Build shared library instead of static linked one." OFF )
+
 # Tunable variables
 set ( LUAI_MAXSTACK 65500 CACHE NUMBER "Max. # of stack slots for a thread (<64K)." )
 set ( LUAI_MAXCSTACK 8000 CACHE NUMBER "Max. # of stack slots for a C func (<10K)." )
@@ -72,7 +74,10 @@ set ( LUA_CPATH_DEFAULT "./?${LUA_MODULE_SUFFIX};${LUA_DIR}${LUA_CDIR}/?${LUA_MO
 
 if ( WIN32 AND NOT CYGWIN )
   # Windows systems
-  add_definitions ( -DLUA_BUILD_AS_DLL -DLUAJIT_OS=LUAJIT_OS_WINDOWS)
+  add_definitions ( -DLUAJIT_OS=LUAJIT_OS_WINDOWS)
+  if (LUAJIT_SHARED)
+    add_definitions ( -DLUA_BUILD_AS_DLL)
+  endif()
   option ( LUA_BUILD_WLUA "Build wluajit interpreter for no-console applications." ON )
   set ( LJVM_MODE peobj )
   # Paths (Double escapes needed)
@@ -303,7 +308,11 @@ set ( LJCORE_C
   ${LJLIB_C}
 )
 
-add_library ( liblua SHARED ${LJCORE_C} ${DEPS} )
+if ( LUAJIT_SHARED)
+  add_library ( liblua SHARED ${LJCORE_C} ${DEPS} )
+else()
+  add_library ( liblua ${LJCORE_C} ${DEPS} )
+endif()
 target_link_libraries ( liblua ${LIBS} )
 set_target_properties ( liblua PROPERTIES OUTPUT_NAME lua CLEAN_DIRECT_OUTPUT 1 )
 
