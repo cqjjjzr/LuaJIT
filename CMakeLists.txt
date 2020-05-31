@@ -18,7 +18,7 @@ set ( LUA_CPATH "LUA_CPATH" CACHE STRING "Environment variable to use as package
 set ( LUA_INIT "LUA_INIT" CACHE STRING "Environment variable for initial script." )
 
 option ( LUA_ANSI "Use only ansi features." OFF )
-option ( LUA_USE_RELATIVE_LOADLIB "Use modified loadlib.c with support for relative paths on posix systems." ON)
+option ( LUA_USE_RELATIVE_LOADLIB "Use modified loadlib.c with support for relative paths on posix systems." OFF)
 set ( LUA_IDSIZE 60 CACHE NUMBER "gives the maximum size for the description of the source." )
 set ( LUA_PROMPT "> " CACHE STRING "Is the default prompt used by stand-alone Lua." )
 set ( LUA_PROMPT2 ">> " CACHE STRING "Is the default continuation prompt used by stand-alone Lua." )
@@ -171,7 +171,7 @@ set ( DASM_FLAGS -D FPU -D HFABI )
 set ( DASM_ARCH x86 )
 
 # Raspberry PI, ARM
-if ( ${CMAKE_SYSTEM_PROCESSOR} MATCHES "armv6l" )
+if ( ${CMAKE_SYSTEM_PROCESSOR} MATCHES "armv6l" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "armv7l" )
   set ( DASM_ARCH arm )
   list ( APPEND DASM_FLAGS -D DUALNUM )
   set ( DASM_VER 60 )
