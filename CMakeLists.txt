@@ -171,7 +171,7 @@ set ( DASM_FLAGS -D FPU -D HFABI )
 set ( DASM_ARCH x86 )
 
 # Raspberry PI, ARM
-if ( ${CMAKE_SYSTEM_PROCESSOR} MATCHES "armv6l" )
+if ( ${CMAKE_SYSTEM_PROCESSOR} MATCHES "armv6l" OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES "armv7l" )
   set ( DASM_ARCH arm )
   list ( APPEND DASM_FLAGS -D DUALNUM )
   set ( DASM_VER 60 )
